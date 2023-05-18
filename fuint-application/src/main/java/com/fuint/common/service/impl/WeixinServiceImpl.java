@@ -1,9 +1,8 @@
 package com.fuint.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONArray;
-import com.fuint.common.bean.WxPayBean;
+import com.alibaba.fastjson.JSONObject;
 import com.fuint.common.dto.OrderDto;
 import com.fuint.common.dto.UserOrderDto;
 import com.fuint.common.enums.*;
@@ -12,7 +11,10 @@ import com.fuint.common.service.*;
 import com.fuint.common.util.RedisUtil;
 import com.fuint.framework.exception.BusinessCheckException;
 import com.fuint.framework.web.ResponseObject;
-import com.fuint.repository.model.*;
+import com.fuint.repository.model.MtMessage;
+import com.fuint.repository.model.MtOrder;
+import com.fuint.repository.model.MtSetting;
+import com.fuint.repository.model.MtUser;
 import com.fuint.utils.StringUtil;
 import com.ijpay.core.enums.SignType;
 import com.ijpay.core.kit.HttpKit;
@@ -28,9 +30,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.core.env.Environment;
 import weixin.popular.util.JsonUtil;
 
 import javax.crypto.Cipher;
@@ -65,8 +67,8 @@ public class WeixinServiceImpl implements WeixinService {
     @Autowired
     private MessageService messageService;
 
-    @Autowired
-    private StoreService storeService;
+//    @Autowired
+//    private StoreService storeService;
 
     @Autowired
     private PaymentService paymentService;
@@ -74,8 +76,8 @@ public class WeixinServiceImpl implements WeixinService {
     @Autowired
     private Environment env;
 
-    @Autowired
-    WxPayBean wxPayBean;
+//    @Autowired
+//    WxPayBean wxPayBean;
 
     private static final String CALL_BACK_URL = "/clientApi/pay/weixinCallback";
 
@@ -192,6 +194,7 @@ public class WeixinServiceImpl implements WeixinService {
         return responseObject;
     }
 
+    @Override
     public Map<String, String> processResXml(HttpServletRequest request) {
         try {
             String xmlMsg = HttpKit.readData(request);
@@ -210,6 +213,7 @@ public class WeixinServiceImpl implements WeixinService {
         return null;
     }
 
+    @Override
     public void processRespXml(HttpServletResponse response, boolean flag){
         Map<String,String> respData = new HashMap<>();
         if (flag) {

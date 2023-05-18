@@ -1,8 +1,8 @@
 package com.fuint.module.clientApi.controller;
 
-import com.alipay.api.AlipayApiException;
-import com.fuint.common.bean.WxPayBean;
-import com.fuint.common.dto.*;
+import com.fuint.common.dto.CouponDto;
+import com.fuint.common.dto.UserInfo;
+import com.fuint.common.dto.UserOrderDto;
 import com.fuint.common.enums.OrderStatusEnum;
 import com.fuint.common.enums.SettingTypeEnum;
 import com.fuint.common.service.*;
@@ -10,20 +10,22 @@ import com.fuint.common.util.TokenUtil;
 import com.fuint.framework.exception.BusinessCheckException;
 import com.fuint.framework.web.BaseController;
 import com.fuint.framework.web.ResponseObject;
-import com.fuint.repository.model.*;
+import com.fuint.repository.model.MtSetting;
+import com.fuint.repository.model.MtUser;
+import com.fuint.repository.model.MtUserGrade;
 import com.fuint.utils.StringUtil;
-import com.ijpay.alipay.AliPayApi;
 import com.ijpay.core.kit.HttpKit;
 import com.ijpay.core.kit.WxPayKit;
 import com.ijpay.wxpay.WxPayApiConfigKit;
 import io.swagger.annotations.Api;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
