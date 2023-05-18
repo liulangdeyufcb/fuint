@@ -41,9 +41,9 @@ import java.util.Map;
 public class ClientPayController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientPayController.class);
-
-    @Autowired
-    WxPayBean wxPayBean;
+//
+//    @Autowired
+//    WxPayBean wxPayBean;
 
     /**
      * 微信服务接口
@@ -51,11 +51,11 @@ public class ClientPayController extends BaseController {
     @Autowired
     private WeixinService weixinService;
 
-    /**
-     * 支付宝服务接口
-     * */
-    @Autowired
-    private AlipayService alipayService;
+//    /**
+//     * 支付宝服务接口
+//     * */
+//    @Autowired
+//    private AlipayService alipayService;
 
     /**
      * 支付服务接口
@@ -232,41 +232,41 @@ public class ClientPayController extends BaseController {
         }
         return null;
     }
-
-    /**
-     * 支付宝支付回调
-     */
-    @RequestMapping(value = "/aliPayCallback", method = RequestMethod.POST)
-    @CrossOrigin
-    public String aliPayCallback(HttpServletRequest request) throws Exception {
-        try {
-            // 获取支付宝POST过来反馈信息
-            Map<String, String> params = AliPayApi.toMap(request);
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                logger.info("{} = {}", entry.getKey(), entry.getValue());
-            }
-            String orderSn = params.get("out_trade_no") != null ? params.get("out_trade_no") : "";
-            if (StringUtil.isEmpty(orderSn)) {
-                logger.error("支付宝验证失败 订单号为空");
-            }
-            Boolean verifyResult = alipayService.checkCallBack(params);
-            if (verifyResult) {
-                logger.info("支付宝验证成功 succcess");
-                UserOrderDto orderInfo = orderService.getOrderByOrderSn(orderSn);
-                Boolean flag = paymentService.paymentCallback(orderInfo);
-                if (flag) {
-                    return "success";
-                } else {
-                    return "failure";
-                }
-            } else {
-                logger.error("支付宝验证失败 orderSn={}", orderSn);
-                return "failure";
-            }
-        } catch (AlipayApiException e) {
-            e.printStackTrace();
-            logger.error("支付宝回调出错啦...");
-            return "failure";
-        }
-    }
+//
+//    /**
+//     * 支付宝支付回调
+//     */
+//    @RequestMapping(value = "/aliPayCallback", method = RequestMethod.POST)
+//    @CrossOrigin
+//    public String aliPayCallback(HttpServletRequest request) throws Exception {
+//        try {
+//            // 获取支付宝POST过来反馈信息
+//            Map<String, String> params = AliPayApi.toMap(request);
+//            for (Map.Entry<String, String> entry : params.entrySet()) {
+//                logger.info("{} = {}", entry.getKey(), entry.getValue());
+//            }
+//            String orderSn = params.get("out_trade_no") != null ? params.get("out_trade_no") : "";
+//            if (StringUtil.isEmpty(orderSn)) {
+//                logger.error("支付宝验证失败 订单号为空");
+//            }
+//            Boolean verifyResult = alipayService.checkCallBack(params);
+//            if (verifyResult) {
+//                logger.info("支付宝验证成功 succcess");
+//                UserOrderDto orderInfo = orderService.getOrderByOrderSn(orderSn);
+//                Boolean flag = paymentService.paymentCallback(orderInfo);
+//                if (flag) {
+//                    return "success";
+//                } else {
+//                    return "failure";
+//                }
+//            } else {
+//                logger.error("支付宝验证失败 orderSn={}", orderSn);
+//                return "failure";
+//            }
+//        } catch (AlipayApiException e) {
+//            e.printStackTrace();
+//            logger.error("支付宝回调出错啦...");
+//            return "failure";
+//        }
+//    }
 }

@@ -49,11 +49,11 @@ public class MessageJob {
      **/
     private int MAX_SEND_NUM = 50;
 
-    @Scheduled(cron = "${message.job.time}")
+    @Scheduled(cron = "0 0/1 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void dealMessage() throws BusinessCheckException {
-        String theSwitch = environment.getProperty("message.job.switch");
-        if (theSwitch.equals("1")) {
+//        String theSwitch = environment.getProperty("message.job.switch");
+//        if (theSwitch.equals("1")) {
             logger.info("MessageJobStart!!!");
             List<MtMessage> dataList = messageService.getNeedSendList();
             if (dataList.size() > 0) {
@@ -69,6 +69,6 @@ public class MessageJob {
                 }
             }
             logger.info("MessageJobEnd!!!");
-        }
+//        }
     }
 }

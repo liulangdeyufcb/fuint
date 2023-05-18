@@ -175,7 +175,7 @@ public class WeixinServiceImpl implements WeixinService {
         if (respData.get("return_code").equals("SUCCESS")) {
             if (respData.get("trade_type").equals(PayTypeEnum.JSAPI.getKey())) {
                 String prepayId = respData.get("prepay_id");
-                getApiConfig(orderInfo.getStoreId(), platform);
+//                getApiConfig(orderInfo.getStoreId(), platform);
                 WxPayApiConfig wxPayApiConfig = WxPayApiConfigKit.getWxPayApiConfig();
                 respData = WxPayKit.miniAppPrepayIdCreateSign(wxPayApiConfig.getAppId(), prepayId, wxPayApiConfig.getPartnerKey(), SignType.MD5);
                 String jsonStr = JSON.toJSONString(respData);
@@ -198,7 +198,7 @@ public class WeixinServiceImpl implements WeixinService {
             logger.info("支付通知=" + xmlMsg);
             Map<String, String> result = WxPayKit.xmlToMap(xmlMsg);
             String returnCode = result.get("return_code");
-            getApiConfig(0, PlatformTypeEnum.MP_WEIXIN.getCode());
+//            getApiConfig(0, PlatformTypeEnum.MP_WEIXIN.getCode());
             if (WxPayKit.verifyNotify(result, WxPayApiConfigKit.getWxPayApiConfig().getPartnerKey(), SignType.MD5)) {
                 if (WxPayKit.codeIsOk(returnCode)) {
                     return result;
@@ -435,7 +435,7 @@ public class WeixinServiceImpl implements WeixinService {
     @Override
     public String queryPaidOrder(Integer storeId, String transactionId, String orderSn) {
         try {
-            getApiConfig(storeId, PlatformTypeEnum.MP_WEIXIN.getCode());
+//            getApiConfig(storeId, PlatformTypeEnum.MP_WEIXIN.getCode());
             WxPayApiConfig wxPayApiConfig = WxPayApiConfigKit.getWxPayApiConfig();
             Map<String, String> params = OrderQueryModel.builder()
                     .appid(wxPayApiConfig.getAppId())
@@ -466,7 +466,7 @@ public class WeixinServiceImpl implements WeixinService {
             logger.info("请求平台：{}, 订单号：{}", platform, orderSn);
 
             // 支付配置
-            getApiConfig(storeId, platform);
+//            getApiConfig(storeId, platform);
             WxPayApiConfig wxPayApiConfig = WxPayApiConfigKit.getWxPayApiConfig();
             Map<String, String> params = MicroPayModel.builder()
                     .appid(wxPayApiConfig.getAppId())
@@ -543,7 +543,7 @@ public class WeixinServiceImpl implements WeixinService {
             logger.info("调用微信支付下单接口入参{}", JsonUtil.toJSONString(reqData));
             logger.info("请求平台：{}", platform);
             // 支付配置
-            getApiConfig(storeId, platform);
+//            getApiConfig(storeId, platform);
             WxPayApiConfig wxPayApiConfig = WxPayApiConfigKit.getWxPayApiConfig();
             Map<String, String> params = UnifiedOrderModel
                     .builder()
@@ -605,7 +605,7 @@ public class WeixinServiceImpl implements WeixinService {
             Integer refundFeeInt = refundFee.intValue();
 
             // 支付配置
-            getApiConfig(storeId, platform);
+//            getApiConfig(storeId, platform);
             WxPayApiConfig wxPayApiConfig = WxPayApiConfigKit.getWxPayApiConfig();
             Map<String, String> params = RefundModel.builder()
                     .appid(wxPayApiConfig.getAppId())
@@ -634,38 +634,38 @@ public class WeixinServiceImpl implements WeixinService {
             throw new BusinessCheckException("WeixinService.doRefund 微信退款失败：" + e.getMessage());
         }
     }
-
-    /**
-     * 获取支付配置
-     * @param storeId
-     * @param platform
-     * */
-    private WxPayApiConfig getApiConfig(Integer storeId, String platform) throws BusinessCheckException {
-        WxPayApiConfig apiConfig;
-        MtStore mtStore = storeService.queryStoreById(storeId);
-        String mchId = wxPayBean.getMchId();
-        String apiV2 = wxPayBean.getApiV2();
-        if (mtStore != null && StringUtil.isNotEmpty(mtStore.getWxApiV2()) && StringUtil.isNotEmpty(mtStore.getWxMchId())) {
-            mchId = mtStore.getWxMchId();
-            apiV2 = mtStore.getWxApiV2();
-        }
-        apiConfig = WxPayApiConfig.builder()
-                   .appId(wxPayBean.getAppId())
-                   .mchId(mchId)
-                   .partnerKey(apiV2)
-                   .certPath(wxPayBean.getCertPath())
-                   .domain(wxPayBean.getDomain())
-                   .build();
-        // 微信内h5公众号支付
-        if (platform.equals(PlatformTypeEnum.H5.getCode())) {
-            String wxAppId = env.getProperty("weixin.official.appId");
-            String wxAppSecret = env.getProperty("weixin.official.appSecret");
-            if (StringUtil.isNotEmpty(wxAppId) && StringUtil.isNotEmpty(wxAppSecret)) {
-                apiConfig.setAppId(wxAppId);
-                apiConfig.setApiKey(wxAppSecret);
-            }
-        }
-        WxPayApiConfigKit.setThreadLocalWxPayApiConfig(apiConfig);
-        return apiConfig;
-    }
+//
+//    /**
+//     * 获取支付配置
+//     * @param storeId
+//     * @param platform
+//     * */
+//    private WxPayApiConfig getApiConfig(Integer storeId, String platform) throws BusinessCheckException {
+//        WxPayApiConfig apiConfig;
+//        MtStore mtStore = storeService.queryStoreById(storeId);
+//        String mchId = wxPayBean.getMchId();
+//        String apiV2 = wxPayBean.getApiV2();
+//        if (mtStore != null && StringUtil.isNotEmpty(mtStore.getWxApiV2()) && StringUtil.isNotEmpty(mtStore.getWxMchId())) {
+//            mchId = mtStore.getWxMchId();
+//            apiV2 = mtStore.getWxApiV2();
+//        }
+//        apiConfig = WxPayApiConfig.builder()
+//                   .appId(wxPayBean.getAppId())
+//                   .mchId(mchId)
+//                   .partnerKey(apiV2)
+//                   .certPath(wxPayBean.getCertPath())
+//                   .domain(wxPayBean.getDomain())
+//                   .build();
+//        // 微信内h5公众号支付
+//        if (platform.equals(PlatformTypeEnum.H5.getCode())) {
+//            String wxAppId = env.getProperty("weixin.official.appId");
+//            String wxAppSecret = env.getProperty("weixin.official.appSecret");
+//            if (StringUtil.isNotEmpty(wxAppId) && StringUtil.isNotEmpty(wxAppSecret)) {
+//                apiConfig.setAppId(wxAppId);
+//                apiConfig.setApiKey(wxAppSecret);
+//            }
+//        }
+//        WxPayApiConfigKit.setThreadLocalWxPayApiConfig(apiConfig);
+//        return apiConfig;
+//    }
 }

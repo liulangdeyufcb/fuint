@@ -51,11 +51,11 @@ public class OrderCancelJob {
      * */
     private int OVER_TIME = 30;
 
-    @Scheduled(cron = "${orderCancel.job.time}")
+    @Scheduled(cron = "0 0/1 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void dealOrder() throws BusinessCheckException {
-        String theSwitch = environment.getProperty("orderCancel.job.switch");
-         if (theSwitch.equals("1")) {
+//        String theSwitch = environment.getProperty("orderCancel.job.switch");
+//         if (theSwitch.equals("1")) {
             logger.info("OrderCancelJobStart!!!");
             Map<String, Object> param = new HashMap<>();
             param.put("status", OrderStatusEnum.CREATED.getKey());
@@ -81,6 +81,6 @@ public class OrderCancelJob {
                 }
             }
             logger.info("OrderCancelJobEnd!!!");
-        }
+//        }
     }
 }

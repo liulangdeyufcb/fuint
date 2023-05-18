@@ -70,11 +70,11 @@ public class CouponExpireJob {
      **/
     private int MAX_SEND_NUM = 50;
 
-    @Scheduled(cron = "${couponExpire.job.time}")
+    @Scheduled(cron = "0 0/1 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void dealCoupon() throws BusinessCheckException {
-        String theSwitch = environment.getProperty("couponExpire.job.switch");
-        if (theSwitch.equals("1")) {
+//        String theSwitch = environment.getProperty("couponExpire.job.switch");
+//        if (theSwitch.equals("1")) {
             logger.info("CouponExpireJobJobStart!!!");
 
             // 获取3天内到期的会员卡券
@@ -114,6 +114,6 @@ public class CouponExpireJob {
             }
 
             logger.info("CouponExpireJobJobEnd!!!");
-        }
+//        }
     }
 }
